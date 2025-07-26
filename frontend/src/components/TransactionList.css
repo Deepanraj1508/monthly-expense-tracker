@@ -1,0 +1,61 @@
+.transactions-table th {
+  background: #e3eafc;
+  color: #1976d2;
+  font-weight: 700;
+  font-size: 1.15em;
+  border-bottom: 2.5px solid #b6c8f5;
+  padding: 18px 20px;
+}
+
+.transactions-table td {
+  font-size: 1.08em;
+  padding: 16px 20px;
+}
+
+.transactions-table tr {
+  transition: background 0.2s;
+}
+
+.transactions-table tr:nth-child(even) {
+  background: #f7fafd;
+}
+
+.transactions-table tr.editing {
+  background: #fffbe7;
+  border-left: 5px solid #ffd600;
+}
+
+.action-btn {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 28px;
+  font-size: 1.0em;
+  font-weight: 600;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.action-btn:hover {
+  background: #0d47a1;
+}
+
+.action-btn.cancel {
+  background: #f44336;
+}
+
+.action-btn.cancel:hover {
+  background: #b71c1c;
+}
+
+.action-btn.save {
+  background: #43a047;
+}
+
+.action-btn.save:hover {
+  background: #1b5e20;
+} 
+
+

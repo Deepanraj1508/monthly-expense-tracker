@@ -1,0 +1,92 @@
+:root {
+  --primary-color: #1976d2;
+  --border-color: #cfd8dc;
+  --hover-bg: #e3eafc;
+  --input-padding: 16px 20px;
+  --border-radius: 6px;
+  --font-size-base: 1.15em;
+  --font-size-sm: 1.08em;
+  --font-size-btn: 1.1em;
+  --btn-padding: 14px 32px;
+}
+
+/* Transaction Form Container */
+.transaction-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.transaction-form-row {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Inputs and Selects */
+.transaction-form input,
+.transaction-form select {
+  padding: var(--input-padding);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  min-width: 160px;
+  width: 220px;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.transaction-form input:focus,
+.transaction-form select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* Button */
+.transaction-form button {
+  padding: var(--btn-padding);
+  font-size: var(--font-size-btn);
+  font-weight: 600;
+  border-radius: var(--border-radius);
+  margin-left: 12px;
+  cursor: pointer;
+  border: none;
+  background-color: var(--primary-color);
+  color: #fff;
+  transition: background-color 0.2s ease;
+  min-width: 120px;
+}
+
+.transaction-form button:hover {
+  background-color: #115293;
+}
+
+/* Suggestions Dropdown */
+.suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  font-size: var(--font-size-sm);
+  z-index: 10;
+}
+
+/* Dropdown Items */
+.suggestions-dropdown li {
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.suggestions-dropdown li:hover {
+  background-color: var(--hover-bg);
+}
