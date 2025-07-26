@@ -7,8 +7,11 @@ const BankStatement = ({ transactions, initialBalance = 0 }) => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [month, setMonth] = useState('');
+  const [descriptionFilter, setDescriptionFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
-  // Filter transactions by date range or month
+  // Filter transactions by date range, month, or description
   let filtered = [...transactions];
   if (month) {
     filtered = filtered.filter(tx => {
@@ -23,14 +26,20 @@ const BankStatement = ({ transactions, initialBalance = 0 }) => {
     });
   }
 
+  if (descriptionFilter) {
+    filtered = filtered.filter(tx => tx.description.toLowerCase().includes(descriptionFilter.toLowerCase()));
+  }
+
   // Transactions in ascending order (oldest first)
   const sorted = filtered.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+  const totalPages = Math.ceil(sorted.length / itemsPerPage);
+  const paginatedTransactions = sorted.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   let runningBalance = initialBalance;
   let totalCredit = 0;
   let totalDebit = 0;
 
-  const rows = sorted.map((tx, idx) => {
+  const rows = paginatedTransactions.map((tx, idx) => {
     const credit = tx.type === 'credit' ? tx.amount : '';
     const debit = tx.type === 'debit' ? tx.amount : '';
     if (tx.type === 'credit') {
@@ -68,6 +77,18 @@ const BankStatement = ({ transactions, initialBalance = 0 }) => {
     doc.save(fileName);
   };
 
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div className="bank-statement-page">
       <div className="bank-statement-filters">
@@ -81,7 +102,19 @@ const BankStatement = ({ transactions, initialBalance = 0 }) => {
           <label>Month:</label><br />
           <input type="month" value={month} onChange={e => { setMonth(e.target.value); setStartDate(''); setEndDate(''); }} />
         </div>
+        <div>
+          <label>Description:</label><br />
+          <input type="text" placeholder="Search by description" value={descriptionFilter} onChange={e => setDescriptionFilter(e.target.value)} />
+        </div>
         <button onClick={handleDownloadPDF}>Download PDF</button>
+      </div>
+      <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <button onClick={handlePreviousPage} disabled={currentPage === 1} className="pagination-btn">Previous</button>
+        <div className="pagination-info">
+          <span>Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong></span>
+          <span style={{ marginLeft: '10px' }}>Total Records: <strong>{sorted.length}</strong></span>
+        </div>
+        <button onClick={handleNextPage} disabled={currentPage === totalPages} className="pagination-btn">Next</button>
       </div>
       <table className="bank-statement-table">
         <thead>

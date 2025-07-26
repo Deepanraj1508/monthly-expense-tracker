@@ -8,6 +8,8 @@ const TransactionList = ({ transactions, onEdit }) => {
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({ type: '', amount: '', description: '', created_at: '' });
   const [message, setMessage] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const startEdit = (tx) => {
     setEditId(tx.id);
@@ -27,11 +29,32 @@ const TransactionList = ({ transactions, onEdit }) => {
   };
 
   const sortedTransactions = [...transactions].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  const totalPages = Math.ceil(sortedTransactions.length / itemsPerPage);
+  const paginatedTransactions = sortedTransactions.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   return (
     <div style={{ marginBottom: 24 }}>
-      <h3>Transactions</h3>
       {message && <div style={{ color: 'green', marginBottom: 8 }}>{message}</div>}
+      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
+        <button onClick={handlePreviousPage} disabled={currentPage === 1} className="pagination-btn">Previous</button>
+        <div className="pagination-info">
+          <span>Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong></span>
+          <span style={{ marginLeft: '10px' }}>Total Records: <strong>{sortedTransactions.length}</strong></span>
+        </div>
+        <button onClick={handleNextPage} disabled={currentPage === totalPages} className="pagination-btn">Next</button>
+      </div>
       <table className="transactions-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
@@ -43,7 +66,7 @@ const TransactionList = ({ transactions, onEdit }) => {
           </tr>
         </thead>
         <tbody>
-          {sortedTransactions.map(tx => (
+          {paginatedTransactions.map(tx => (
             <tr key={tx.id} className={editId === tx.id ? 'editing' : ''}>
               <td>
                 {editId === tx.id ? (
